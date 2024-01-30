@@ -9,7 +9,9 @@ models.Base.metadata.create_all(bind=engine)
 
 #  Initialize FastAPI
 app = FastAPI()
+
 router = APIRouter(prefix="/api", tags=["Root"])
+
 router.include_router(user.router)
 router.include_router(book.router)
 router.include_router(borrow_book.router)
