@@ -2,6 +2,7 @@ import uvicorn
 import models
 from database import engine
 from fastapi import FastAPI, APIRouter
+from routers import user
 
 # Create all the tables
 models.Base.metadata.create_all(bind=engine)
@@ -9,6 +10,7 @@ models.Base.metadata.create_all(bind=engine)
 #  Initialize FastAPI
 app = FastAPI()
 router = APIRouter(prefix="/api", tags=["Root"])
+router.include_router(user.router)
 
 
 @router.get("/")
