@@ -16,3 +16,19 @@ def check_conflicts(db: Session, email: str = None, **kwargs):
         .first()
     )
     return existing_user
+
+
+def check_book(db: Session, id: str):
+    book = db.query(models.Book).filter(models.Book.book_id == id).first()
+    return book
+
+
+def check_conflicts_book(db: Session, isbn: str = None, **kwargs):
+    existing_book = (
+        db.query(models.Book)
+        .filter(
+            models.Book.isbn == isbn,
+        )
+        .first()
+    )
+    return existing_book
