@@ -2,9 +2,10 @@ from database import engine
 from sqlalchemy.schema import CreateTable
 from sqlalchemy.orm import Session
 from database import engine
-from models import Base, User, Book, BookDetail, BorrowedBook
+from models import Base, User, Book, BookDetail, BorrowedBook, Admin
 from faker import Faker
 import random
+import utils
 
 Base.metadata.create_all(bind=engine)
 for table in Base.metadata.sorted_tables:
@@ -54,4 +55,6 @@ for _ in range(10):
     )
     session.add(borrowed_book)
 
+admin = Admin(usernmame="admin", password=utils.hash_password("Password1@"))
+session.add(admin)
 session.commit()
