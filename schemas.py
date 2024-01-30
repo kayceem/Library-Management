@@ -1,5 +1,6 @@
 from pydantic import BaseModel, EmailStr, Field, validator
 from datetime import datetime, date
+from typing import Optional
 
 
 class UserBase(BaseModel):
@@ -60,6 +61,7 @@ class BookBorrow(BaseModel):
     user_id: int
     book_id: int
     borrow_date: date
+    return_date: Optional[date]
 
     class Config:
         orm_mode = True
@@ -68,13 +70,3 @@ class BookBorrow(BaseModel):
 class BookReturn(BaseModel):
     book_id: int
     return_date: date
-
-    class Config:
-        orm_mode = True
-
-
-class BorrowedBook(BaseModel):
-    title: str
-
-    class Config:
-        orm_mode = True

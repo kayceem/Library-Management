@@ -60,6 +60,7 @@ class BorrowedBook(Base):
         ForeignKey("book.book_id", ondelete="CASCADE"),
         nullable=False,
         primary_key=True,
+        unique=True,
     )
     borrow_date = Column(
         Date,

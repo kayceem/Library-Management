@@ -32,3 +32,14 @@ def check_conflicts_book(db: Session, isbn: str = None, **kwargs):
         .first()
     )
     return existing_book
+
+
+def check_borrowed_book(db: Session, book_id: str = None):
+    borrowed_book = (
+        db.query(models.BorrowedBook)
+        .filter(
+            models.BorrowedBook.book_id == book_id,
+        )
+        .first()
+    )
+    return borrowed_book

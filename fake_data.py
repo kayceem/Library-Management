@@ -26,7 +26,7 @@ for _ in range(10):
 for _ in range(10):
     book = Book(
         title=fake.sentence(nb_words=5),
-        isbn=fake.unique.random_number(digits=13),
+        isbn=fake.unique.random_int(min=10**12, max=10**13 - 1),
         published_date=fake.date_between(start_date="-5y", end_date="today"),
         genre=fake.word(),
     )
