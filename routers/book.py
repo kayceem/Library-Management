@@ -1,7 +1,7 @@
 from typing import List
 from database import get_db
 from sqlalchemy.orm import Session
-import schemas, models, utils
+import schemas, models, utils, auth_config as oauth2
 from fastapi import Depends, status, HTTPException, APIRouter
 
 router = APIRouter(prefix="/books", tags=["Books"])
@@ -9,7 +9,10 @@ router = APIRouter(prefix="/books", tags=["Books"])
 
 # Get all books
 @router.get("/", response_model=List[schemas.BookResponse])
-async def get_books(db: Session = Depends(get_db)):
+async def get_books(
+    db: Session = Depends(get_db),
+    admin: models.Admin = Depends(oauth2.get_current_admin),
+):
     books = db.query(models.Book).all()
     return books
 
@@ -19,6 +22,7 @@ async def get_books(db: Session = Depends(get_db)):
 async def get_book_by_id(
     book_id: str,
     db: Session = Depends(get_db),
+    admin: models.Admin = Depends(oauth2.get_current_admin),
 ):
     book = utils.check_book(db=db, id=book_id)
     if not book:
@@ -35,6 +39,7 @@ async def get_book_by_id(
 async def register_book(
     book: schemas.BookBase,
     db: Session = Depends(get_db),
+    admin: models.Admin = Depends(oauth2.get_current_admin),
 ):
     conflicts = utils.check_conflicts_book(db, **book.dict())
 
@@ -58,6 +63,7 @@ async def register_book(
 async def update_book_detail(
     book_detail: schemas.BookDetail,
     db: Session = Depends(get_db),
+    admin: models.Admin = Depends(oauth2.get_current_admin),
 ):
     book = utils.check_book(db=db, id=book_detail.book_id)
     if not book:

@@ -1,6 +1,7 @@
 from pydantic import BaseModel, EmailStr, Field, validator
 from datetime import datetime, date
 from typing import Optional
+import re
 
 
 class UserBase(BaseModel):
@@ -70,3 +71,26 @@ class BookBorrow(BaseModel):
 class BookReturn(BaseModel):
     book_id: int
     return_date: date
+
+
+class AdminBase(BaseModel):
+    username: str = Field(min_length=3, max_length=255)
+
+    class Config:
+        orm_mode = True
+
+
+class Admin(AdminBase):
+    password: str = Field(min_length=8, max_length=32)
+
+    @validator("password")
+    def validate_password(cls, v):
+        if not re.match(r"^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]", v):
+            raise ValueError(
+                "Password must contain at least one uppercase letter, one digit, and one special character"
+            )
+        return v
+
+
+class TokenData(BaseModel):
+    username: str

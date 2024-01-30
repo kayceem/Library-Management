@@ -5,6 +5,12 @@ from sqlalchemy.sql.sqltypes import TIMESTAMP
 from sqlalchemy import Column, Integer, BigInteger, String, ForeignKey, Date
 
 
+class Admin(Base):
+    __tablename__ = "admin"
+    username = Column(String(255), primary_key=True)
+    password = Column(String(255), nullable=False)
+
+
 class User(Base):
     __tablename__ = "user"
     user_id = Column(Integer, primary_key=True, autoincrement=True)

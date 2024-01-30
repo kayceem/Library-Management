@@ -1,7 +1,7 @@
 from typing import List
 from database import get_db
 from sqlalchemy.orm import Session
-import schemas, models, utils
+import schemas, models, utils, auth_config as oauth2
 from fastapi import Depends, status, HTTPException, APIRouter
 
 router = APIRouter(prefix="/borrow", tags=["Books"])
@@ -9,7 +9,10 @@ router = APIRouter(prefix="/borrow", tags=["Books"])
 
 # Get all borrowed books
 @router.get("/", response_model=List[schemas.BookResponse])
-async def get_borrowed_books(db: Session = Depends(get_db)):
+async def get_borrowed_books(
+    db: Session = Depends(get_db),
+    admin: models.Admin = Depends(oauth2.get_current_admin),
+):
     borrowed_books = db.query(models.BorrowedBook).all()
     books = [borrowed_book.book for borrowed_book in borrowed_books]
     return books
@@ -22,6 +25,7 @@ async def get_borrowed_books(db: Session = Depends(get_db)):
 async def borrow_book(
     borrow_details: schemas.BookBorrow,
     db: Session = Depends(get_db),
+    admin: models.Admin = Depends(oauth2.get_current_admin),
 ):
     book = utils.check_book(db=db, id=borrow_details.book_id)
     if not book:

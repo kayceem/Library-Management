@@ -1,6 +1,6 @@
 from database import get_db
 from sqlalchemy.orm import Session
-import schemas, models
+import schemas, models, auth_config as oauth2
 from fastapi import Depends, status, HTTPException, APIRouter
 
 router = APIRouter(prefix="/return", tags=["Books"])
@@ -11,6 +11,7 @@ router = APIRouter(prefix="/return", tags=["Books"])
 async def return_book(
     return_details: schemas.BookReturn,
     db: Session = Depends(get_db),
+    admin: models.Admin = Depends(oauth2.get_current_admin),
 ):
     borrowed_book = (
         db.query(models.BorrowedBook)

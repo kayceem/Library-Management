@@ -1,5 +1,10 @@
 import models
 from sqlalchemy.orm import Session
+from passlib.context import CryptContext
+
+# Create a password context for hashing
+passwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
 
 # Check if user exists
 def check_user(db: Session, id: str):
@@ -18,10 +23,12 @@ def check_conflicts(db: Session, email: str = None, **kwargs):
     )
     return existing_user
 
+
 # Check if book exists
 def check_book(db: Session, id: str):
     book = db.query(models.Book).filter(models.Book.book_id == id).first()
     return book
+
 
 # Check for conflicts in book details
 def check_conflicts_book(db: Session, isbn: str = None, **kwargs):
@@ -34,6 +41,7 @@ def check_conflicts_book(db: Session, isbn: str = None, **kwargs):
     )
     return existing_book
 
+
 # Check for borrow status of a book
 def check_borrowed_book(db: Session, book_id: str = None):
     borrowed_book = (
@@ -44,3 +52,11 @@ def check_borrowed_book(db: Session, book_id: str = None):
         .first()
     )
     return borrowed_book
+
+
+def hash(passwd: str):
+    return passwd_context.hash(passwd)
+
+
+def verify(passwd, hashed_passwd):
+    return passwd_context.verify(passwd, hashed_passwd)
