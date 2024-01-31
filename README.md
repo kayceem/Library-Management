@@ -133,7 +133,7 @@ If the `fake_data.py` script is used to generate data, the default credentials a
 ### Testing
 
 For testing API routes Insomnia was used.
-![API Testing](./Insomnia%200343%20073.png)
+![API Testing](./images/Insomnia%200343%20073.png)
 
 ### Assumptions
 
