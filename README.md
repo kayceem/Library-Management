@@ -138,3 +138,4 @@ For testing API routes Insomnia was used.
 ### Assumptions
 
 -   **One book per ISBN**
+-   **.env file was included in repo for ease of use**
